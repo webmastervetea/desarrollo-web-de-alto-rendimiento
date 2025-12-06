@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integración en el Ecosistema de Build</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; margin: 0; padding: 20px; background-color: #f4f4f9; }
+        header, section, footer { background: #fff; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+        h1, h2, h3, h4 { color: #333; }
+        code { background-color: #eee; padding: 2px 4px; border-radius: 4px; font-family: Consolas, 'Courier New', monospace; }
+        pre { background-color: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 15px 0; }
+        pre code { background-color: transparent; color: inherit; padding: 0; border-radius: 0; }
+        ul, ol { list-style-type: disc; margin-left: 20px; }
+        hr { border: 0; height: 1px; background-color: #ccc; margin: 30px 0; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Desarrollo Web de Alto Rendimiento. [<a href="https://www.linkedin.com/in/oscarlizarragag/" target="_blank">Soporte</a>]</h1>
+        <hr>
+        <h2>7. 🚀 Integración en el Ecosistema de *Build*</h2>
+        <p>Un profesional no solo escribe HTML5, sino que entiende cómo su código es transformado por las herramientas modernas de **build** para producción. Este proceso es fundamental para alcanzar las mejores puntuaciones en métricas como **LCP** e **INP**.</p>
+    </header>
+
+    <section id="modulos">
+        <h3>A. Dominio de los Formatos Modulares</h3>
+        <p>Aunque HTML5 soporta módulos nativos (<code>&lt;script type="module"&gt;</code>), la mayoría de los proyectos usan *bundlers* (empaquetadores) para optimizar el código, como **Webpack**, **Rollup** o **Vite**.</p>
+        
+        <ul>
+            <li>
+                <strong>Uso de <code>import</code> y <code>export</code> (ESM):</strong> Entender que las herramientas de *build* analizan estas sentencias para crear el **árbol de dependencias**, lo cual permite la siguiente técnica.
+            </li>
+            <li>
+                <strong>Tree Shaking:</strong> Saber cómo estructurar el código (tanto JS como CSS) para que el *bundler* pueda eliminar el **código muerto** (*dead code*) que no se está utilizando. Esto resulta en archivos finales **más pequeños** y un mejor **LCP** y **INP**.
+            </li>
+        </ul>
+    </section>
+
+    <hr>
+
+    <section id="optimizacion-html">
+        <h3>B. Optimización del HTML en el *Build*</h3>
+        <p>El HTML final que llega al navegador no es el que escribiste; ha sido procesado para maximizar el rendimiento.</p>
+        
+        <ul>
+            <li>
+                <strong>Minificación y Compresión:</strong> Entender que herramientas como **HTMLMinifier** eliminan espacios en blanco, comentarios y etiquetas innecesarias. El servidor luego comprime el archivo con **Gzip** o **Brotli** antes de enviarlo.
+            </li>
+            <li>
+                <strong>Inlining de Recursos Críticos:</strong> Un experto sabe configurar el *build* para inyectar el **CSS Crítico** directamente en el <code>&lt;head&gt;</code> del HTML. Esto es crucial para la puntuación del **LCP** y para evitar el *Flash of Unstyled Content* (FOUC), permitiendo que el navegador renderice la parte superior de la página inmediatamente.
+            </li>
+            <li>
+                <strong>Hashing de Archivos:</strong> Las herramientas de *build* añaden un *hash* (identificador único) al nombre de los archivos CSS/JS (ej., <code>app.f34a8b.js</code>). Esto permite establecer una política de **caché de larga duración** (<code>Cache-Control: max-age=31536000</code>) sin preocuparse de que los usuarios viejos carguen código obsoleto.
+            </li>
+        </ul>
+    </section>
+
+    <hr>
+
+    <section id="ssr-ssg">
+        <h3>C. Server-Side Rendering (SSR) y Static Site Generation (SSG)</h3>
+        <p>Para la máxima velocidad y SEO, el HTML se debe generar antes de que el navegador lo solicite.</p>
+        
+        <ul>
+            <li>
+                <strong>SSR (Renderizado en el Servidor):</strong> Generar la primera vista de la aplicación en el servidor. Esto proporciona un HTML **completamente formado** (ideal para el **SEO** y el **LCP**) y luego el JavaScript toma el control en el cliente (*hidratación*).
+            </li>
+            <li>
+                <strong>SSG (Generación Estática):</strong> Generar todo el HTML de la página **durante el *build***. Esto es lo más rápido posible, ya que solo se sirve un archivo estático.
+            </li>
+        </ul>
+    </section>
+
+    <footer>
+        <hr>
+        <p>Un experto no solo domina HTML5, sino que también sabe cómo las **herramientas y las técnicas de *build*** maximizan el rendimiento y la mantenibilidad de ese HTML5 en un entorno de producción a gran escala.</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial Avanzado de HTML5 para Expertos</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; margin: 0; padding: 20px; background-color: #f4f4f9; }
+        header, section, footer { background: #fff; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+        h1, h2, h3 { color: #333; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #007bff; color: white; }
+        ul { list-style-type: disc; margin-left: 20px; }
+        blockquote { border-left: 5px solid #007bff; padding-left: 15px; margin: 20px 0; background: #e9f5ff; }
+        hr { border: 0; height: 1px; background-color: #ccc; margin: 30px 0; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Desarrollo Web de Alto Rendimiento. [<a href="https://www.linkedin.com/in/oscarlizarragag/" target="_blank">Soporte</a>]</h1>
+        <hr>
+        <h2>🚀 Tutorial Avanzado de HTML5 para Expertos</h2>
+        <p>Este tutorial se enfoca en la semántica, las APIs, el rendimiento y la accesibilidad.</p>
+    </header>
+
+    <section id="estructura-semantica">
+        <h3>1. 🏗️ Estructura Semántica Avanzada</h3>
+        <p>HTML5 introdujo etiquetas para dar **significado** a las diferentes partes de una página, lo cual es crucial para el **SEO** y la **Accesibilidad**.</p>
+        
+        <h4>Uso Correcto de las Nuevas Etiquetas Estructurales:</h4>
+        <ul>
+            <li><strong><code>&lt;article&gt;</code>:</strong> Para contenido **autónomo y redistribuible** (p. ej., una entrada de blog, un comentario de usuario).</li>
+            <li><strong><code>&lt;section&gt;</code>:</strong> Para agrupar contenido **relacionado temáticamente**, generalmente con su propio encabezado. **No** es un simple reemplazo de <code>&lt;div&gt;</code>.</li>
+            <li><strong><code>&lt;nav&gt;</code>:</strong> Para enlaces de **navegación principal**.</li>
+            <li><strong><code>&lt;aside&gt;</code>:</strong> Para contenido **indirectamente relacionado** con el contenido principal (p. ej., barras laterales, bloques de anuncios).</li>
+            <li><strong><code>&lt;header&gt;</code> y <code>&lt;footer&gt;</code>:</strong> Se pueden usar **varias veces** dentro de una página (p. ej., un <code>&lt;header&gt;</code> para la página y otro para un <code>&lt;article&gt;</code>).</li>
+        </ul>
+
+        <h4>Esquema de Documento y Encabezados (<code>&lt;h1&gt;</code> a <code>&lt;h6&gt;</code>):</h4>
+        <ul>
+            <li>Asegúrate de que solo haya **un <code>&lt;h1&gt;</code>** por página.</li>
+            <li>La estructura de los encabezados debe formar un **esquema lógico** del contenido.</li>
+        </ul>
+    </section>
+
+    <hr>
+
+    <section id="multimedia-graficos">
+        <h3>2. 🎨 Elementos Multimedia y Gráficos</h3>
+        <p>El manejo moderno de multimedia y gráficos es un pilar de HTML5.</p>
+
+        <h4><code>&lt;audio&gt;</code> y <code>&lt;video&gt;</code> Avanzados:</h4>
+        <ul>
+            <li>Utiliza el elemento <code>&lt;source&gt;</code> para proporcionar **múltiples formatos de archivo** (p. ej., <code>MP4</code>, <code>WebM</code>, <code>Ogg</code>) para garantizar la compatibilidad con diferentes navegadores.</li>
+            <li>Aprovecha los atributos de **interactividad** como <code>controls</code>, <code>autoplay</code>, <code>loop</code> y, sobre todo, <code>preload</code>.</li>
+            <li><strong>Web VTT (WebVTT):</strong> Usa el elemento <code>&lt;track&gt;</code> para añadir **subtítulos, descripciones o metadatos** para mejorar la accesibilidad.</li>
+        </ul>
+
+        <h4>Gráficos en 2D y 3D:</h4>
+        <ul>
+            <li><strong><code>&lt;canvas&gt;</code>:</strong> Ideal para **gráficos 2D dinámicos**, animaciones, juegos y visualización de datos. Requiere JavaScript para dibujar. Los profesionales deben dominar su **API de contexto 2D** (ej. <code>context.fillRect()</code>, <code>context.arc()</code>). </li>
+            <li><strong><code>&lt;svg&gt;</code> (Scalable Vector Graphics):</strong> Se utiliza para **gráficos vectoriales** declarativos basados en XML. Es la mejor opción para logotipos, iconos e ilustraciones complejas, ya que **escala sin perder calidad** y se puede manipular con CSS y JavaScript. </li>
+        </ul>
+    </section>
+
+    <hr>
+
+    <section id="apis-clave">
+        <h3>3. 🌐 APIs Clave de HTML5</h3>
+        <p>Estas APIs son esenciales para crear **aplicaciones web enriquecidas y de alto rendimiento**.</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>API</th>
+                    <th>Descripción y Uso Profesional</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Geolocation API</strong></td>
+                    <td>Obtiene la **ubicación geográfica** del usuario (latitud/longitud). Es crucial para aplicaciones basadas en la ubicación. **Usa siempre HTTPS**.</td>
+                </tr>
+                <tr>
+                    <td><strong>Web Storage (LocalStorage/SessionStorage)</strong></td>
+                    <td>Almacena datos clave/valor en el lado del cliente (hasta 5-10MB). **<code>LocalStorage</code>** persiste después de cerrar el navegador, ideal para configuraciones de usuario.</td>
+                </tr>
+                <tr>
+                    <td><strong>Drag and Drop API</strong></td>
+                    <td>Permite arrastrar elementos de la interfaz. Se utiliza para **interfaces de usuario ricas** como tableros Kanban o gestión de archivos.</td>
+                </tr>
+                <tr>
+                    <td><strong>History API</strong></td>
+                    <td>Manipula el historial del navegador (<code>pushState</code>, <code>replaceState</code>) sin recargar la página. Es fundamental para construir **Single Page Applications (SPAs)**.</td>
+                </tr>
+                <tr>
+                    <td><strong>Web Workers</strong></td>
+                    <td>Permite ejecutar **scripts en segundo plano** en hilos separados, **sin bloquear** la interfaz de usuario. Es vital para tareas intensivas en CPU, mejorando el rendimiento. </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <hr>
+
+    <section id="formularios-avanzados">
+        <h3>4. 📝 Formularios Avanzados (Web Forms 2.0)</h3>
+        <p>HTML5 elevó los formularios de simples entradas a herramientas de validación de datos.</p>
+
+        <h4>Nuevos Tipos de Entrada (<code>&lt;input type="..."&gt;</code>):</h4>
+        <ul>
+            <li><code>email</code>, <code>url</code>, <code>tel</code>, <code>number</code>, <code>range</code>, <code>date</code>, <code>time</code>, <code>color</code>.</li>
+            <li>Estos tipos activan la **validación automática** del navegador y, en móviles, el **teclado optimizado** (ej. teclado numérico para <code>number</code>).</li>
+        </ul>
+
+        <h4>Atributos de Validación Clave:</h4>
+        <ul>
+            <li><code>required</code>: Campo obligatorio.</li>
+            <li><code>pattern</code>: Define una **expresión regular** específica para validar la entrada (un *must* para profesionales).</li>
+            <li><code>autocomplete</code>: Mejora la UX permitiendo al navegador rellenar automáticamente.</li>
+            <li><code>novalidate</code> (en el <code>&lt;form&gt;</code>): Desactiva la validación predeterminada del navegador si se usa una validación personalizada con JavaScript.</li>
+        </ul>
+    </section>
+
+    <hr>
+
+    <section id="accesibilidad-aria">
+        <h3>5. ♿ Accesibilidad (ARIA)</h3>
+        <p>Un profesional debe garantizar que las aplicaciones sean accesibles para todos los usuarios.</p>
+
+        <h4>ARIA (Accessible Rich Internet Applications):</h4>
+        <p>Un conjunto de atributos (roles, estados y propiedades) que se añaden a los elementos HTML para definir **información semántica** para las tecnologías de asistencia (como lectores de pantalla).</p>
+        <ul>
+            <li><strong>Ejemplo:</strong> Un botón personalizado debe tener <code>role="button"</code> para que sea reconocido como tal.</li>
+            <li><strong>Roles:</strong> <code>role="dialog"</code>, <code>role="alert"</code>, <code>role="tablist"</code>.</li>
+            <li><strong>Propiedades:</strong> <code>aria-label</code>, <code>aria-describedby</code>, <code>aria-expanded</code>.</li>
+        </ul>
+
+        <blockquote>
+            <strong>Nota:</strong> La mejor práctica es utilizar los elementos semánticos de HTML5 **nativos** siempre que sea posible, ya que tienen accesibilidad incorporada. Solo recurre a ARIA para elementos de interfaz complejos que no tienen un equivalente HTML nativo (como un widget de control deslizante personalizado).
+        </blockquote>
+    </section>
+
+    <hr>
+
+    <footer>
+        <h2>🛠️ Próximos Pasos Sugeridos</h2>
+        <p>Para llevar tus habilidades al siguiente nivel, te recomiendo que profundices en estos temas:</p>
+        <ul>
+            <li><strong>Service Workers:</strong> La clave para crear **Progressive Web Apps (PWAs)** y permitir la funcionalidad *offline*.</li>
+            <li><strong>WebSockets:</strong> Para la **comunicación bidireccional en tiempo real** entre el cliente y el servidor, ideal para chat o juegos multijugador.</li>
+            <li><strong>Optimizaciones de Rendimiento:</strong> Usar **<code>async</code>** y **<code>defer</code>** en tus *scripts* para no bloquear el renderizado.</li>
+        </ul>
+    </footer>
+
+</body>
+</html>

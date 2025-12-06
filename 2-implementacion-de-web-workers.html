@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Implementación de Web Workers</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; margin: 0; padding: 20px; background-color: #f4f4f9; }
+        header, section { background: #fff; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+        h1, h2, h3 { color: #333; }
+        code { background-color: #eee; padding: 2px 4px; border-radius: 4px; font-family: Consolas, 'Courier New', monospace; }
+        pre { background-color: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 6px; overflow-x: auto; }
+        pre code { background-color: transparent; color: inherit; padding: 0; border-radius: 0; }
+        ul { list-style-type: disc; margin-left: 20px; }
+        hr { border: 0; height: 1px; background-color: #ccc; margin: 30px 0; }
+        .note { border-left: 5px solid #007bff; padding: 10px 15px; margin: 20px 0; background: #e9f5ff; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Desarrollo Web de Alto Rendimiento. [<a href="https://www.linkedin.com/in/oscarlizarragag/" target="_blank">Soporte</a>]</h1>
+        <hr>
+        <h2>⚙️ Implementación de Web Workers</h2>
+        <p>Los **Web Workers** permiten que el código JavaScript se ejecute en un **hilo separado** en segundo plano, **sin bloquear** el hilo principal de la interfaz de usuario (UI). Esto es fundamental para mantener la aplicación web **receptiva** mientras se ejecutan tareas intensivas como cálculos complejos, procesamiento de datos pesados o <em>fetching</em> de grandes archivos. </p>
+    </header>
+
+    <section id="flujo-de-trabajo">
+        <h3>1. El Flujo de Trabajo</h3>
+        <p>La comunicación entre el hilo principal (donde está el DOM y la UI) y el Web Worker se realiza mediante **mensajes** a través de los métodos <code>postMessage()</code> y <code>onmessage</code>.</p>
+        
+        <ul>
+            <li>**Hilo Principal (UI):** Crea el Worker, le envía datos y espera la respuesta.</li>
+            <li>**Worker (Segundo Plano):** Escucha la solicitud, ejecuta la tarea y devuelve el resultado.</li>
+        </ul>
+    </section>
+
+    <hr>
+
+    <section id="ejemplo-practico">
+        <h3>2. Ejemplo de Código Práctico</h3>
+        <p>Imagina que necesitas calcular la secuencia de Fibonacci para un número muy grande. Hacer esto en el hilo principal bloquearía la UI por varios segundos.</p>
+
+        <h4>Paso 1: El Archivo del Worker (<code>fibo_worker.js</code>)</h4>
+        <p>Este archivo se ejecuta en el hilo secundario. No tiene acceso directo al DOM ni a la ventana (<code>window</code>).</p>
+        
+        <pre><code>
+// fibo_worker.js
+// La función recursiva de cálculo (intensiva)
+function calcularFibonacci(n) {
+    if (n &lt;= 1) return n;
+    return calcularFibonacci(n - 1) + calcularFibonacci(n - 2);
+}
+
+// Escucha el mensaje enviado por el hilo principal
+self.onmessage = function(event) {
+    const numero = event.data; // El dato enviado es el número N
+    
+    // Ejecuta la tarea intensiva
+    const resultado = calcularFibonacci(numero);
+    
+    // Devuelve el resultado al hilo principal
+    self.postMessage(resultado);
+};
+        </code></pre>
+
+        <h4>Paso 2: El Script del Hilo Principal (<code>main.js</code>)</h4>
+        <p>Este script se ejecuta en tu página HTML y gestiona la UI.</p>
+
+        <pre><code>
+// main.js
+const numeroAProcesar = 40; // Un número que tomará tiempo
+
+// 1. Crear una nueva instancia del Web Worker
+const fiboWorker = new Worker('fibo_worker.js');
+
+// 2. Escuchar la respuesta del Worker
+fiboWorker.onmessage = function(event) {
+    const resultado = event.data;
+    console.log(`✅ El resultado de Fibonacci(${numeroAProcesar}) es: ${resultado}`);
+    
+    // Habilitar un botón o actualizar la UI
+    document.getElementById('estado').textContent = 'Tarea completada.';
+    
+    // Importante: Terminar el Worker cuando ya no se necesite
+    fiboWorker.terminate();
+};
+
+// 3. Manejar errores
+fiboWorker.onerror = function(error) {
+    console.error('❌ Error en el Web Worker:', error.message);
+};
+
+// 4. Enviar los datos para que el Worker comience
+fiboWorker.postMessage(numeroAProcesar);
+
+// Mientras el Worker calcula, esta línea se ejecuta inmediatamente (UI no bloqueada)
+document.getElementById('estado').textContent = 'Calculando... La UI está libre para interacción.';
+        </code></pre>
+    </section>
+
+    <hr>
+
+    <section id="consideraciones-profesionales">
+        <h3>3. Consideraciones Profesionales</h3>
+        
+        <ul>
+            <li>
+                <strong>Sin Acceso al DOM:</strong> Recuerda que los Workers no pueden acceder directamente a la interfaz (elementos del DOM o el objeto <code>window</code>). Toda interacción debe ser a través de <code>postMessage()</code>.
+            </li>
+            <li>
+                <strong>Transferable Objects:</strong> Para enviar grandes cantidades de datos (como <code>ArrayBuffer</code>s) de manera más eficiente, utiliza la sobrecarga de <code>postMessage()</code> que permite **transferir la propiedad** del objeto. Esto evita la costosa clonación del dato:
+                <pre><code>
+// Hilo principal
+worker.postMessage(miArrayBuffer, [miArrayBuffer]);
+                </code></pre>
+            </li>
+            <li>
+                <strong>Shared Workers:</strong> Si necesitas que varios <em>scripts</em> (por ejemplo, pestañas de un navegador) compartan el mismo Worker, puedes usar **Shared Workers** en lugar de Workers dedicados.
+            </li>
+        </ul>
+    </section>
+    
+</body>
+</html>

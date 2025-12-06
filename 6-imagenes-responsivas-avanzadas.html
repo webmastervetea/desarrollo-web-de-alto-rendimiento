@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imágenes Responsivas Avanzadas: <picture> y srcset</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; margin: 0; padding: 20px; background-color: #f4f4f9; }
+        header, section, footer { background: #fff; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+        h1, h2, h3, h4 { color: #333; }
+        code { background-color: #eee; padding: 2px 4px; border-radius: 4px; font-family: Consolas, 'Courier New', monospace; }
+        pre { background-color: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 15px 0; }
+        pre code { background-color: transparent; color: inherit; padding: 0; border-radius: 0; }
+        ul { list-style-type: disc; margin-left: 20px; }
+        hr { border: 0; height: 1px; background-color: #ccc; margin: 30px 0; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Desarrollo Web de Alto Rendimiento. [<a href="https://www.linkedin.com/in/oscarlizarragag/" target="_blank">Soporte</a>]</h1>
+        <hr>
+        <h2>🖼️ Imágenes Responsivas Avanzadas: <code>&lt;picture&gt;</code> y <code>srcset</code></h2>
+        <p>La optimización de imágenes responsivas se trata de permitir que el **navegador** elija el archivo de imagen más apropiado, en lugar de que tú le digas exactamente cuál usar. Esto asegura una carga más rápida (menor consumo de datos) y mejor renderizado.</p>
+            </header>
+
+    <section id="srcset">
+        <h3>1. El Atributo <code>srcset</code> para <code>&lt;img /&gt;</code></h3>
+        <p>El atributo <code>srcset</code> es la técnica más común y sencilla para ofrecer diferentes **resoluciones** de la misma imagen, permitiendo al navegador elegir la mejor opción basada en la densidad de píxeles (DPR) de la pantalla y el ancho de la <em>viewport</em>.</p>
+
+        <h4>A. Definición de la Lista de Imágenes</h4>
+        <p>El <code>srcset</code> contiene una lista de imágenes candidatas separadas por comas, donde cada una define:</p>
+        <ol>
+            <li>La **URL** del archivo de imagen.</li>
+            <li>Un **descriptor** de ancho (<code>w</code>) o un descriptor de densidad de píxel (<code>x</code>).</li>
+        </ol>
+
+        <h4>B. Uso con Descriptor de Ancho (<code>w</code>)</h4>
+        <p>Este es el método más flexible y se usa junto con el atributo **<code>sizes</code>**.</p>
+        
+        <pre><code>
+&lt;img 
+    srcset="imagen-peque.jpg 480w,
+            imagen-media.jpg 800w,
+            imagen-grande.jpg 1200w" 
+    sizes="(max-width: 600px) 100vw, 
+           (max-width: 900px) 50vw,
+           33vw"
+    src="imagen-media.jpg" 
+    alt="Una descripción de la imagen"&gt;
+        </code></pre>
+        
+        <ul>
+            <li><strong><code>srcset</code>:</strong> Le dice al navegador: "Tengo estas tres imágenes, con anchos nativos de 480, 800 y 1200 píxeles".</li>
+            <li><strong><code>sizes</code>:</strong> Le dice al navegador: "En viewports pequeñas (hasta 600px) la imagen debe ocupar el 100% del ancho de la vista (<code>100vw</code>). En viewports medianas (hasta 900px), el 50%, y en viewports grandes, el 33%".</li>
+            <li><strong>Decisión del Navegador:</strong> El navegador calcula el ancho de la imagen en CSS (basado en <code>sizes</code>), lo compara con las imágenes disponibles en <code>srcset</code> y su densidad de píxeles, y elige el archivo más eficiente.</li>
+        </ul>
+    </section>
+
+    <hr>
+
+    <section id="picture">
+        <h3>2. El Elemento <code>&lt;picture&gt;</code> para Dirección de Arte y Formato</h3>
+        <p>El elemento <code>&lt;picture&gt;</code> es un **contenedor** que permite aplicar la **dirección de arte** (cambiar completamente la imagen, no solo la resolución) y manejar diferentes **formatos** (ej. WebP) basado en <em>media queries</em>.</p>
+
+        <h4>A. Dirección de Arte (Cambio de Recorte)</h4>
+        <p>Esto es útil si necesitas mostrar una imagen recortada para móviles y una imagen completa para escritorios.</p>
+        
+        <pre><code>
+&lt;picture&gt;
+    &lt;source media="(max-width: 799px)" srcset="cuerpo-entero-recorte.jpg"&gt;
+    &lt;source media="(min-width: 800px)" srcset="cuerpo-entero-completa.jpg"&gt;
+    &lt;img src="cuerpo-entero-completa.jpg" alt="Persona en la escena"&gt;
+&lt;/picture&gt;
+        </code></pre>
+
+        <h4>B. Formatos Modernos (WebP, AVIF)</h4>
+        <p>Permite aprovechar formatos de compresión superior como WebP o AVIF, mientras proporciona un <em>fallback</em> a formatos más antiguos (como JPEG) para navegadores que no los soportan.</p>
+        
+        <pre><code>
+&lt;picture&gt;
+    &lt;source type="image/webp" srcset="imagen.webp"&gt;
+    &lt;source type="image/jpeg" srcset="imagen.jpg"&gt;
+    &lt;img src="imagen.jpg" alt="Descripción accesible"&gt;
+&lt;/picture&gt;
+        </code></pre>
+        
+        <p>El navegador comprueba las etiquetas <code>&lt;source&gt;</code> en orden y utiliza la primera que **soporta** y que coincide con la <em>media query</em>. Si ninguna coincide, utiliza el <code>&lt;img /&gt;</code> final.</p>
+    </section>
+
+    <hr>
+
+    <footer>
+        <h3>Conclusión para Expertos</h3>
+        <p>La implementación profesional de imágenes no se limita a un simple <code>&lt;img&gt;</code>. Se centra en:</p>
+        <ol>
+            <li><strong>Priorizar <code>srcset</code> con <code>sizes</code>:</strong> Para resolver el problema de la **densidad de píxeles y el tamaño de la viewport** (el navegador toma la decisión).</li>
+            <li><strong>Usar <code>&lt;picture&gt;</code>:</strong> Para resolver la **dirección de arte** (cambio de imagen o recorte) y el **soporte de formatos** (tú tomas la decisión basada en reglas).</li>
+        </ol>
+    </footer>
+
+</body>
+</html>

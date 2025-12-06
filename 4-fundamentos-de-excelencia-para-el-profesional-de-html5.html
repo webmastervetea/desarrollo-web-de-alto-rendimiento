@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fundamentos de Excelencia para el Profesional de HTML5</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; margin: 0; padding: 20px; background-color: #f4f4f9; }
+        header, section, footer { background: #fff; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+        h1, h2, h3 { color: #333; }
+        code { background-color: #eee; padding: 2px 4px; border-radius: 4px; font-family: Consolas, 'Courier New', monospace; }
+        ul { list-style-type: disc; margin-left: 20px; }
+        hr { border: 0; height: 1px; background-color: #ccc; margin: 30px 0; }
+        .summary { border: 1px dashed #007bff; padding: 15px; background: #e9f5ff; border-radius: 6px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Desarrollo Web de Alto Rendimiento. [<a href="https://www.linkedin.com/in/oscarlizarragag/" target="_blank">Soporte</a>]</h1>
+        <hr>
+        <h2>💎 Fundamentos de Excelencia para el Profesional de HTML5</h2>
+    </header>
+
+    <section id="accesibilidad">
+        <h3>1. ♿ Accesibilidad (ARIA y Más Allá)</h3>
+        <p>Ser un profesional significa que **la accesibilidad no es opcional**.</p>
+        
+        <ul>
+            <li><strong>HTML Semántico Primero:</strong> Utiliza las etiquetas nativas (<code>&lt;button&gt;</code>, <code>&lt;a href="..."&gt;</code>, <code>&lt;form&gt;</code>) en lugar de <code>&lt;div&gt;</code> con roles ARIA. La semántica nativa es siempre la mejor práctica.</li>
+            <li><strong>WAI-ARIA (Web Accessibility Initiative - ARIA):</strong> Dominar los **Roles**, **Estados** y **Propiedades** para widgets y componentes complejos. Saber cuándo y cómo usar, por ejemplo, <code>aria-live</code> para actualizaciones dinámicas.</li>
+            <li><strong>Focus Management:</strong> Asegurar que la navegación por teclado (usando la tecla Tab) sea lógica y que el foco vuelva al lugar correcto después de cerrar modales o diálogos.</li>
+            <li><strong>Contraste de Color:</strong> Conocer y aplicar los estándares **WCAG** (Web Content Accessibility Guidelines) para el contraste de texto.</li>
+        </ul>
+    </section>
+
+    <hr>
+
+    <section id="rendimiento">
+        <h3>2. ⚡ Rendimiento y Optimización (Core Web Vitals)</h3>
+        <p>El rendimiento es directamente proporcional a la profesionalidad.</p>
+        
+        <ul>
+            <li><strong>Priorización de Recursos:</strong> Usar atributos como <code>loading="lazy"</code> para imágenes fuera de la vista y dominar las directivas de precarga y preconexión:
+                <ul>
+                    <li><code>&lt;link rel="preload" href="..."&gt;</code></li>
+                    <li><code>&lt;link rel="preconnect" href="..."&gt;</code></li>
+                </ul>
+            </li>
+            <li><strong>Recursos Críticos y No Críticos:</strong> Asegurar que el **CSS Crítico** se cargue primero (in-line o con alta prioridad) para el **First Contentful Paint (FCP)**.</li>
+            <li><strong>Render Blocking Resources:</strong> Minimizar y optimizar el CSS y JavaScript que bloquean el renderizado inicial de la página. Usar <code>async</code> o <code>defer</code> para <em>scripts</em>.</li>
+        </ul>
+    </section>
+
+    <hr>
+
+    <section id="estandares">
+        <h3>3. 📄 Estándares y Especificaciones</h3>
+        <p>Un profesional opera en el marco de los estándares oficiales.</p>
+        
+        <ul>
+            <li><strong>Validación de Código:</strong> Utilizar un **validador de HTML5** (como el del W3C) regularmente. Un código válido es menos propenso a errores de renderizado en diferentes navegadores.</li>
+            <li><strong>Conocimiento de la Especificación Living Standard:</strong> Entender que HTML es un **"Living Standard"** mantenido por el WHATWG (en lugar de ser un documento estático). Esto significa que las reglas evolucionan, y el profesional se mantiene al día con los cambios en las etiquetas y APIs.</li>
+        </ul>
+    </section>
+
+    <hr>
+
+    <section id="responsivo">
+        <h3>4. 🖼️ Diseño Responsivo Avanzado</h3>
+        <p>No solo se trata de <em>Media Queries</em> básicas.</p>
+        
+        <ul>
+            <li><strong>Etiqueta <code>&lt;picture&gt;</code> y <code>srcset</code>:</strong> Dominar el arte de servir la imagen **perfecta** (en tamaño y resolución) para cada dispositivo usando <code>srcset</code> y la etiqueta <code>&lt;picture&gt;</code> para control artístico o diferentes formatos (ej. WebP).</li>
+            <li><strong>Unidades Modernas:</strong> Utilizar unidades relativas como <code>rem</code>, <code>em</code>, <code>vh</code>, <code>vw</code>, y especialmente las unidades de <em>viewport</em> pequeñas, grandes y dinámicas (<code>svh</code>, <code>lvh</code>, <code>dvh</code>) para manejar la barra de herramientas del navegador móvil.</li>
+            <li><strong>Grid y Flexbox:</strong> No son HTML5 per se, pero son fundamentales para el diseño moderno y su uso óptimo impacta la estructura HTML.</li>
+        </ul>
+    </section>
+
+    <hr>
+
+    <section id="herramientas">
+        <h3>5. 🛠️ Herramientas de Desarrollo y Debugging</h3>
+        <p>El experto no solo escribe código, también lo prueba y depura con eficacia.</p>
+        
+        <ul>
+            <li><strong>Herramientas de Desarrollador (DevTools):</strong> Dominar la pestaña de **Rendimiento** (para identificar bloqueos de hilos), la pestaña de **Red** (para analizar la carga de recursos) y las herramientas de **Accesibilidad** y **SEO** incorporadas en navegadores como Chrome y Firefox.</li>
+            <li><strong>Validación Semántica:</strong> Usar DevTools para inspeccionar la estructura del árbol de accesibilidad y confirmar que las etiquetas ARIA y HTML se interpretan correctamente.</li>
+        </ul>
+    </section>
+
+    <footer>
+        <hr>
+        <div class="summary">
+            <p><strong>En resumen, ser un profesional va más allá de saber las etiquetas; es aplicar el conocimiento para construir experiencias web que sean:</strong></p>
+            <ol>
+                <li><strong>Rendimiento:</strong> Extremadamente rápidas.</li>
+                <li><strong>Accesibles:</strong> Utilizables por cualquier persona.</li>
+                <li><strong>Mantenibles:</strong> Con un código semántico y válido.</li>
+            </ol>
+        </div>
+    </footer>
+
+</body>
+</html>

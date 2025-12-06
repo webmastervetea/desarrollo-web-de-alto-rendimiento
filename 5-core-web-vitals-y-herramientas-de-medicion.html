@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Core Web Vitals y Herramientas de Medición</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; margin: 0; padding: 20px; background-color: #f4f4f9; }
+        header, section { background: #fff; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+        h1, h2, h3 { color: #333; }
+        code { background-color: #eee; padding: 2px 4px; border-radius: 4px; font-family: Consolas, 'Courier New', monospace; }
+        pre { background-color: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 15px 0; }
+        pre code { background-color: transparent; color: inherit; padding: 0; border-radius: 0; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #007bff; color: white; }
+        ul { list-style-type: disc; margin-left: 20px; }
+        hr { border: 0; height: 1px; background-color: #ccc; margin: 30px 0; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Desarrollo Web de Alto Rendimiento. [<a href="https://www.linkedin.com/in/oscarlizarragag/" target="_blank">Soporte</a>]</h1>
+        <hr>
+        <h2>🚀 Core Web Vitals y Herramientas de Medición</h2>
+        <p>Los **Core Web Vitals** son un conjunto de métricas definidas por Google que miden la experiencia del usuario, centrándose en la **velocidad de carga**, la **interactividad** y la **estabilidad visual** de la página.</p>
+        <p>Dominar estas métricas y saber cómo optimizarlas es crucial para un experto.</p>
+    </header>
+
+    <section id="metricas-clave">
+        <h3>1. Las Tres Métricas Clave</h3>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Métrica</th>
+                    <th>Objetivo Profesional</th>
+                    <th>Enfoque de Optimización</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>LCP (Largest Contentful Paint)</strong></td>
+                    <td><strong>2.5 segundos o menos</strong></td>
+                    <td>Mide el tiempo que tarda en renderizarse el **elemento de contenido principal** (imagen, bloque de texto grande) visible en la <em>viewport</em>.</td>
+                </tr>
+                <tr>
+                    <td><strong>FID (First Input Delay)</strong></td>
+                    <td><strong>100 milisegundos o menos</strong></td>
+                    <td>Mide el tiempo desde que el usuario interactúa con la página (clic, toque) hasta que el navegador puede comenzar a **procesar** el evento. (Reemplazado en 2024 por **INP**).</td>
+                </tr>
+                <tr>
+                    <td><strong>CLS (Cumulative Layout Shift)</strong></td>
+                    <td><strong>0.1 o menos</strong></td>
+                    <td>Mide la **estabilidad visual**. Cuantifica la cantidad de **movimiento inesperado** de los elementos de la página mientras se carga.</td>
+                </tr>
+                <tr>
+                    <td><strong>INP (Interaction to Next Paint)</strong></td>
+                    <td><strong>200 milisegundos o menos</strong></td>
+                    <td>El sucesor de FID. Mide la latencia de **todas las interacciones** del usuario y reporta el peor resultado (o el percentil 75).</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <hr>
+
+    <section id="optimizacion-lcp">
+        <h3>2. Optimización para LCP (Largest Contentful Paint)</h3>
+        <p>El LCP suele ser el más difícil de optimizar y está muy ligado a la eficiencia de la estructura HTML y la carga de recursos.</p>
+
+        <ul>
+            <li><strong>HTML Semántico y Optimizado:</strong> Asegúrate de que el **elemento LCP** (a menudo una imagen o un titular principal) sea cargado lo antes posible.</li>
+            <li><strong>Priorización de la Imagen LCP:</strong> Si el elemento LCP es una imagen, asegúrate de que **no** tenga el atributo <code>loading="lazy"</code> y utiliza <code>&lt;link rel="preload" as="image" href="..."&gt;</code> en el <code>&lt;head&gt;</code> para darle la máxima prioridad.</li>
+            <li><strong>Minimizar Bloqueo:</strong> Reduce el tiempo que el navegador pasa analizando CSS y JS. Mueve el CSS no crítico al final del documento y usa <code>defer</code> o <code>async</code> en los <em>scripts</em> de JavaScript.</li>
+        </ul>
+    </section>
+
+    <hr>
+
+    <section id="optimizacion-cls">
+        <h3>3. Optimización para CLS (Cumulative Layout Shift)</h3>
+        <p>El CLS se resuelve asegurando que el navegador sepa **cuánto espacio** necesita cada elemento antes de que se cargue.</p>
+
+        <ul>
+            <li><strong>Dimensiones de Imágenes:</strong> Siempre incluye los atributos **<code>width</code>** y **<code>height</code>** en tus etiquetas <code>&lt;img&gt;</code>. Esto reserva el espacio necesario y evita que el contenido circundante se mueva cuando la imagen se cargue.
+                <pre><code>&lt;img src="hero.jpg" width="1200" height="600" alt="Imagen principal"&gt;</code></pre>
+            </li>
+            <li><strong>Espacio para Ads e Iframes:</strong> Reserva el espacio para bloques de anuncios o <em>widgets</em> embebidos (como videos de YouTube o <em>iframes</em>) incluso si aún no se han cargado.</li>
+        </ul>
+    </section>
+
+    <hr>
+
+    <section id="herramientas-medicion">
+        <h3>4. Herramientas de Medición para Expertos</h3>
+        <p>Un profesional no solo optimiza, sino que **mide consistentemente**.</p>
+
+        <h4>A. Lighthouse (Integrado en DevTools)</h4>
+        <ul>
+            <li><strong>Uso:</strong> Auditoría exhaustiva **basada en laboratorio** (simulada) que analiza Rendimiento, Accesibilidad, Mejores Prácticas y SEO.</li>
+            <li><strong>Enfoque Profesional:</strong> Utiliza el informe para obtener una **lista de oportunidades de mejora** detallada, como "Eliminar recursos que bloquean el renderizado" y "Servir imágenes en formatos de próxima generación".</li>
+        </ul>
+
+        <h4>B. PageSpeed Insights</h4>
+        <ul>
+            <li><strong>Uso:</strong> Muestra datos tanto de **Laboratorio** (Lighthouse) como de **Campo** (datos reales de usuarios de Chrome, o **CrUX**).</li>
+            <li><strong>Enfoque Profesional:</strong> La métrica de **Campo** (Field Data) es más importante, ya que refleja la **experiencia real** de los usuarios. Un profesional siempre prioriza la optimización que mejora las métricas de campo.</li>
+        </ul>
+
+        <h4>C. DevTools (Pestaña Performance)</h4>
+        <ul>
+            <li><strong>Uso:</strong> La herramienta de **debugging más profunda**. Permite grabar la actividad del navegador durante la carga y la interacción.</li>
+            <li><strong>Enfoque Profesional:</strong> Utilízala para:
+                <ul>
+                    <li>Identificar el **Time To Interactive (TTI)** y ver qué tareas de JavaScript están ocupando el hilo principal.</li>
+                    <li>Analizar el **Flame Chart** (Gráfico de Llamadas) para ver exactamente qué funciones están consumiendo más tiempo y causando latencia (vital para INP/FID).</li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+
+</body>
+</html>

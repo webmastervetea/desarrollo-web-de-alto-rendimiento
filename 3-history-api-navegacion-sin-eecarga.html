@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History API: Navegación sin Recarga</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; margin: 0; padding: 20px; background-color: #f4f4f9; }
+        header, section { background: #fff; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+        h1, h2, h3 { color: #333; }
+        code { background-color: #eee; padding: 2px 4px; border-radius: 4px; font-family: Consolas, 'Courier New', monospace; }
+        pre { background-color: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 15px 0; }
+        pre code { background-color: transparent; color: inherit; padding: 0; border-radius: 0; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #007bff; color: white; }
+        ul { list-style-type: disc; margin-left: 20px; }
+        hr { border: 0; height: 1px; background-color: #ccc; margin: 30px 0; }
+        .note { border-left: 5px solid #007bff; padding: 10px 15px; margin: 20px 0; background: #e9f5ff; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Desarrollo Web de Alto Rendimiento. [<a href="https://www.linkedin.com/in/oscarlizarragag/" target="_blank">Soporte</a>]</h1>
+        <hr>
+        <h2>🔗 History API: Navegación sin Recarga</h2>
+        <p>La API se centra en manipular la pila del historial del navegador (los botones de "Atrás" y "Adelante") a través de los objetos <code>history</code> del navegador.</p>
+    </header>
+
+    <section id="pushstate">
+        <h3>1. El Método Clave: <code>pushState()</code></h3>
+        <p>El método <code>history.pushState()</code> te permite agregar una nueva entrada al historial del navegador sin disparar una recarga del documento.</p>
+
+        <h4>Sintaxis</h4>
+        <pre><code>history.pushState(state, title, url);</code></pre>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Parámetro</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong><code>state</code></strong></td>
+                    <td>Un objeto JavaScript que representa el **estado** asociado con la nueva entrada del historial. Puedes recuperar este objeto más tarde en el evento <code>popstate</code>.</td>
+                </tr>
+                <tr>
+                    <td><strong><code>title</code></strong></td>
+                    <td>(Generalmente ignorado por los navegadores) El título que deseas asociar con la nueva entrada del historial.</td>
+                </tr>
+                <tr>
+                    <td><strong><code>url</code></strong></td>
+                    <td>La nueva URL de la página. El navegador **muestra** esta URL en la barra de direcciones, pero **no navega** realmente a ella.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <hr>
+
+    <section id="ejemplo-practico">
+        <h3>2. Ejemplo Práctico: Navegación de Contenido</h3>
+        <p>Imagina un sitio con dos secciones (<code>/seccion1</code> y <code>/seccion2</code>).</p>
+
+        <h4>Paso 1: JavaScript para el Cambio de Estado (<code>history_spa.js</code>)</h4>
+        <p>Este código simula la carga de contenido y la actualización del historial.</p>
+
+        <pre><code>
+// history_spa.js
+
+function cargarContenido(url) {
+    let titulo, contenidoHTML;
+
+    // 1. Simulación de lógica de ruteo y carga de datos
+    if (url.includes('seccion2')) {
+        titulo = 'Sección Dos';
+        contenidoHTML = '&lt;h2&gt;Bienvenido a la Sección 2&lt;/h2&gt;&lt;p&gt;Aquí hay contenido cargado dinámicamente.&lt;/p&gt;';
+    } else {
+        titulo = 'Sección Uno';
+        contenidoHTML = '&lt;h2&gt;Página Principal&lt;/h2&gt;&lt;p&gt;Este es el contenido inicial de la Sección 1.&lt;/p&gt;';
+    }
+
+    // 2. Actualizar el DOM (la UI)
+    document.getElementById('contenido-principal').innerHTML = contenidoHTML;
+    document.title = titulo;
+
+    // 3. Crear el objeto de estado y la URL para el historial
+    const estado = { url: url, titulo: titulo };
+
+    // 4. Agregar la entrada al historial. ¡No hay recarga de página!
+    history.pushState(estado, titulo, url);
+
+    console.log(`✅ Estado agregado. URL actual: ${url}`);
+}
+
+// Escuchador de eventos para los enlaces
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('nav-links').addEventListener('click', (e) => {
+        if (e.target.tagName === 'A') {
+            e.preventDefault(); // Detener la navegación normal (recarga)
+            const nuevaURL = e.target.getAttribute('href');
+            cargarContenido(nuevaURL);
+        }
+    });
+
+    // Inicializar el estado de la URL actual al cargar la página por primera vez
+    history.replaceState({ url: location.pathname, titulo: document.title }, document.title, location.pathname);
+});
+        </code></pre>
+
+        <h4>Paso 2: Manejo de los Botones "Atrás" y "Adelante" (<code>popstate</code>)</h4>
+        <p>Cuando el usuario hace clic en los botones del historial del navegador (Atrás/Adelante), se dispara el evento **<code>popstate</code>**. Aquí es donde debes usar la información almacenada en el objeto <code>state</code>.</p>
+
+        <pre><code>
+// history_spa.js (continuación)
+
+window.addEventListener('popstate', (e) => {
+    // e.state contiene el objeto 'state' que guardamos con pushState()
+    if (e.state) {
+        const { url, titulo } = e.state;
+        
+        // Cargar el contenido basado en el estado recuperado
+        let contenidoHTML;
+        if (url.includes('seccion2')) {
+            contenidoHTML = '&lt;h2&gt;Sección Dos (Desde Atrás)&lt;/h2&gt;&lt;p&gt;Contenido restaurado por popstate.&lt;/p&gt;';
+        } else {
+            contenidoHTML = '&lt;h2&gt;Sección Uno (Desde Atrás)&lt;/h2&gt;&lt;p&gt;Contenido restaurado por popstate.&lt;/p&gt;';
+        }
+
+        document.getElementById('contenido-principal').innerHTML = contenidoHTML;
+        document.title = titulo;
+
+        console.log(`⏪ Navegación por popstate a: ${url}`);
+    }
+});
+        </code></pre>
+    </section>
+
+    <hr>
+
+    <section id="metodos-adicionales">
+        <h3>3. Métodos Adicionales</h3>
+        
+        <ul>
+            <li><strong><code>history.replaceState(state, title, url)</code>:</strong>
+                <ul>
+                    <li>Funciona como <code>pushState()</code>, pero **reemplaza** la entrada actual del historial en lugar de añadir una nueva.</li>
+                    <li>Es útil cuando se desea actualizar el estado de la URL actual (por ejemplo, al aplicar un filtro en una lista) sin abarrotar el historial.</li>
+                </ul>
+            </li>
+            <li><strong><code>history.back()</code>, <code>history.forward()</code>, <code>history.go(delta)</code>:</strong>
+                <ul>
+                    <li>Simulan los clics en los botones del navegador.</li>
+                    <li><code>history.go(-1)</code> es equivalente a <code>history.back()</code>.</li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+
+    <hr>
+
+    <section id="consideraciones-profesionales">
+        <h3>4. Consideraciones Profesionales</h3>
+        
+        <ul>
+            <li>
+                <strong>Fallback para Recargas:</strong> Cuando un usuario recarga la página en una URL generada con <code>pushState()</code> (ej. <code>/seccion2</code>), el servidor **debe** poder manejar esa ruta y servir la página correcta. Si el servidor solo conoce la raíz (<code>/</code>), la página fallará. Esto se resuelve a menudo con la configuración de *routing* en el lado del servidor o mediante el uso del *hash* (<code>#</code>) en la URL (un enfoque más antiguo).
+            </li>
+            <li>
+                <strong>Objeto <code>state</code>:</strong> Sé diligente sobre qué información guardas en el objeto <code>state</code>. Solo necesitas los datos mínimos para poder recrear la vista cuando se dispare el evento <code>popstate</code>.
+            </li>
+        </ul>
+    </section>
+
+</body>
+</html>

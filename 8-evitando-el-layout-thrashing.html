@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evitando el Layout Thrashing (Recálculo Forzado)</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; margin: 0; padding: 20px; background-color: #f4f4f9; }
+        header, section, footer { background: #fff; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+        h1, h2, h3, h4 { color: #333; }
+        code { background-color: #eee; padding: 2px 4px; border-radius: 4px; font-family: Consolas, 'Courier New', monospace; }
+        pre { background-color: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 15px 0; }
+        pre code { background-color: transparent; color: inherit; padding: 0; border-radius: 0; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #007bff; color: white; }
+        ul { list-style-type: disc; margin-left: 20px; }
+        hr { border: 0; height: 1px; background-color: #ccc; margin: 30px 0; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Desarrollo Web de Alto Rendimiento. [<a href="https://www.linkedin.com/in/oscarlizarragag/" target="_blank">Soporte</a>]</h1>
+        <hr>
+        <h2>🎨 Evitando el Layout Thrashing (Recálculo Forzado)</h2>
+    </header>
+
+    <section id="que-es-thrashing">
+        <h3>1. ¿Qué es el Layout Thrashing?</h3>
+        <p>El *Layout Thrashing* es un problema de rendimiento que ocurre cuando el código JavaScript **fuerza** al navegador a realizar el cálculo de diseño (**Layout**) antes de que sea el momento óptimo para hacerlo.</p>
+        <p>El navegador funciona en un ciclo: lee el DOM, calcula todos los estilos, luego calcula el diseño (<code>Layout</code>), y finalmente pinta (<code>Paint</code>) y compone. Este ciclo debe ser asíncrono y por lotes.</p>
+        <p>El *thrashing* ocurre cuando:</p>
+        <ol>
+            <li>**Escribes (Modificas)** el DOM o los estilos (ej. <code>elemento.style.width = '200px'</code>).</li>
+            <li>Inmediatamente después, **Lees** una propiedad de diseño que requiere el valor actualizado (ej. <code>elemento.offsetWidth</code>).</li>
+        </ol>
+        <p>Al leer la propiedad, el navegador se da cuenta de que el diseño está "sucio" (fue modificado en el paso 1) y debe **detenerse y recalcular todo el diseño de forma síncrona** antes de devolver el valor. Si esto ocurre en un bucle, el rendimiento se desploma.</p>
+    </section>
+
+    <hr>
+
+    <section id="propiedades-desencadenantes">
+        <h3>2. Propiedades que Desencadenan la Lectura</h3>
+        <p>Cualquier propiedad que el navegador necesite para calcular la **posición o el tamaño** de un elemento puede forzar un Layout.</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Propiedades de Lectura Comunes que Forzan Layout</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><code>element.offsetLeft</code>, <code>element.offsetTop</code>, <code>element.offsetWidth</code>, <code>element.offsetHeight</code></td></tr>
+                <tr><td><code>element.clientLeft</code>, <code>element.clientTop</code>, <code>element.clientWidth</code>, <code>element.clientHeight</code></td></tr>
+                <tr><td><code>element.scrollWidth</code>, <code>element.scrollHeight</code>, <code>element.scrollTop</code>, <code>element.scrollLeft</code></td></tr>
+                <tr><td><code>window.getComputedStyle()</code></td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <hr>
+
+    <section id="regla-de-oro">
+        <h3>3. La Regla de Oro para Evitar el Thrashing</h3>
+        <p>El principio profesional para el rendimiento es simple:</p>
+        <blockquote>
+            <p><strong>Agrupar las Lecturas y Agrupar las Escrituras.</strong></p>
+        </blockquote>
+        <p><strong>Nunca</strong> alternes entre Lectura (Read) y Escritura (Write) dentro de un mismo bloque de código, especialmente en un bucle.</p>
+
+        <h4>❌ Código Malo (Thrashing)</h4>
+        <pre><code>
+// Iteración que causa Layout Thrashing
+for (let i = 0; i &lt; 100; i++) {
+    // 1. Escritura (Write)
+    elementos[i].style.width = '10px'; 
+    
+    // 2. Lectura (Read): Fuerza al navegador a recalcular el layout para obtener offsetWidth
+    const anchoActual = elementos[i].offsetWidth; 
+    
+    // 3. Escritura (Write)
+    elementos[i].style.height = anchoActual + 'px';
+} 
+        </code></pre>
+
+        <h4>✅ Código Bueno (Optimizado)</h4>
+        <pre><code>
+// Paso 1: Agrupar todas las Lecturas
+const anchos = [];
+for (let i = 0; i &lt; 100; i++) {
+    anchos.push(elementos[i].offsetWidth); // Lecturas agrupadas
+}
+
+// Paso 2: Agrupar todas las Escrituras
+for (let i = 0; i &lt; 100; i++) {
+    // Escrituras agrupadas (el navegador solo recalcula el layout una vez)
+    elementos[i].style.width = '10px';
+    elementos[i].style.height = anchos[i] + 'px';
+}
+        </code></pre>
+    </section>
+
+    <hr>
+
+    <section id="soluciones-avanzadas">
+        <h3>4. Soluciones Avanzadas (requestAnimationFrame)</h3>
+        <p>Cuando se trabaja con animaciones basadas en JavaScript, debes asegurar que las actualizaciones del DOM se realicen justo antes del siguiente repintado del navegador. La herramienta estándar para esto es **<code>requestAnimationFrame()</code>**.</p>
+        <p><code>requestAnimationFrame()</code> garantiza que tu código de **escritura** se ejecute en el momento más óptimo del ciclo de renderizado del navegador, minimizando la posibilidad de colisionar con operaciones de lectura forzada.</p>
+        
+        <pre><code>
+function actualizarAnimacion() {
+    // 1. Lectura: Obtenemos el estado actual
+    const x = elemento.getBoundingClientRect().left;
+
+    // 2. Escritura: Modificamos el DOM
+    elemento.style.transform = `translateX(${x + 10}px)`;
+
+    // Llamamos a la siguiente iteración antes del próximo repintado
+    requestAnimationFrame(actualizarAnimacion); 
+}
+
+requestAnimationFrame(actualizarAnimacion);
+        </code></pre>
+    </section>
+
+</body>
+</html>
