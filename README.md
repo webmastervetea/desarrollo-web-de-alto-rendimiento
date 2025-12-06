@@ -1,5 +1,7 @@
 # Desarrollo Web de Alto Rendimiento: Esta área se centra en el dominio de las arquitecturas y técnicas de codificación que garantizan la velocidad, escalabilidad y eficiencia de las aplicaciones web modernas. [[Soporte](https://www.linkedin.com/in/oscarlizarragag/)]
  
+Aviso Importante si no comprendes este temario o te es muy complicado deberias antes pasar por [[Tutorial Completo de Desarrollo Web: Domina HTML5, CSS y Flexbox Guía para Principiantes](https://github.com/webmastervetea/tutorial-completo-de-desarrollo-web))]
+
 Un profesional en Alto Rendimiento va más allá de la funcionalidad básica, especializándose en:
 
 Optimización de Core Web Vitals (LCP, INP, CLS): Asegurando métricas de usuario en el campo (CrUX) de primer nivel a través de la minimización del bloqueo del hilo principal y la gestión eficiente de recursos.
